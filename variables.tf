@@ -51,6 +51,15 @@ variable "lambda_logs_non_lambda_subscriptions" {
   default = []
 }
 
+variable "lambda_vpc_config" {
+  description = "The VPC configuration for the Lambda."
+  type = object({
+    subnet_ids         = list(string)
+    security_group_ids = list(string)
+  })
+  default = null
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_arn" "role" {

@@ -29,6 +29,7 @@ module "shell_lambda" {
       "ModuleAuthor" = "InvictonLabs"
       "ModuleUrl"    = "https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws"
     }
+    vpc_config = var.lambda_vpc_config
   }
   role_policies                 = var.lambda_role_policies_json
   role_policy_arns              = var.lambda_role_policy_arns
