@@ -14,14 +14,14 @@ module "shell_lambda" {
     module.assert_single_body.checked
   ]
   source                   = "Invicton-Labs/lambda-set/aws"
-  version                  = "0.4.1"
+  version                  = "~> 0.4.1"
   edge                     = false
   source_directory         = "${path.module}/lambda"
   archive_output_directory = "${path.module}/archives/"
   lambda_config = {
     function_name = "invicton-labs-aws-lambda-shell-${random_id.lambda.hex}"
     handler       = "main.lambda_handler"
-    runtime       = "python3.8"
+    runtime       = "python3.9"
     timeout       = var.lambda_timeout
     memory_size   = var.lambda_memory_size
     role          = local.lambda_role
