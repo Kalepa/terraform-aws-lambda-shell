@@ -14,7 +14,7 @@ module "shell_lambda" {
     module.assert_single_body.checked
   ]
   source                   = "Invicton-Labs/lambda-set/aws"
-  version                  = "~> 0.4.1"
+  version                  = "~> 0.4.2"
   edge                     = false
   source_directory         = "${path.module}/lambda"
   archive_output_directory = "${path.module}/archives/"
@@ -25,6 +25,7 @@ module "shell_lambda" {
     timeout       = var.lambda_timeout
     memory_size   = var.lambda_memory_size
     role          = local.lambda_role
+    layers        = var.lambda_layer_arns
     tags = {
       "ModuleAuthor" = "InvictonLabs"
       "ModuleUrl"    = "https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws"

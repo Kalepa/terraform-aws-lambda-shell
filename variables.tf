@@ -60,6 +60,12 @@ variable "lambda_vpc_config" {
   default = null
 }
 
+variable "lambda_layer_arns" {
+  description = "A list of Lambda Layer ARNs to attach to the Lambda."
+  type = list(string)
+  default = []
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_arn" "role" {
