@@ -23,9 +23,13 @@ def lambda_handler(event, context):
     # Run the command as a subprocess
     logger.info("Running command: {}".format(cmd))
 
+    # For the subprocess environment, use all of the existing env vars, plus
+    # any new ones. New ones with the same name will overwrite.
+    new_env = os.environ.copy() | event['environment']
+
     # Start the process
     p = subprocess.Popen(
-        cmd, shell=False, env=event['environment'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cmd, shell=False, env=new_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     timed_out = False
     try:
