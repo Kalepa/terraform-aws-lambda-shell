@@ -11,18 +11,13 @@ logger.setLevel(logging.DEBUG)
 def lambda_handler(event, context):
     logger.debug("Input event: {}".format(event))
 
-    # If a special flag is set, skip the execution
-    if '__IL_TF_LS_SKIP_RUN' in event:
-        return {}
-
     cmd = event['interpreter']
     if event['command'] is not None:
         # Create a unique file for the script to be temporarily stored in
-        scriptpath = "/tmp/botoform-{}".format(uuid.uuid1())
-        f = open(scriptpath, "x")
-        # Write the script to the file
-        f.write(event['command'])
-        f.close()
+        scriptpath = "/tmp/lambda-shell-{}".format(uuid.uuid1())
+        with open(scriptpath, "x") as f:
+            # Write the script to the file
+            f.write(event['command'])
         cmd.append(scriptpath)
 
     # Run the command as a subprocess
@@ -36,12 +31,20 @@ def lambda_handler(event, context):
 
     stdout = result.stdout.decode('utf-8')
     stderr = result.stderr.decode('utf-8')
-    if result.returncode != 0 and event['fail_on_error']:
-        raise subprocess.SubprocessError(
-            "Command returned non-zero exit code ({}) with stdout '{}' and stderr '{}'".format(result.returncode, stdout, stderr))
+    if (result.returncode != 0 and event['fail_on_nonzero_exit_code']) or (len(result.stderr) > 0 and event['fail_on_stderr']):
+        raise subprocess.SubprocessError('''Lambda Shell command failed.
+Exit code: 
+{}
+
+Stdout: 
+{}
+
+Stderr:
+{}
+'''.format(result.returncode, stdout, stderr))
 
     return {
-        'exitstatus': result.returncode,
+        'exit_code': result.returncode,
         'stdout': stdout,
         'stderr': stderr
     }
