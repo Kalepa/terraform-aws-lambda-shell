@@ -1,3 +1,9 @@
+variable "lambda_description" {
+  description = "The description string to apply to the Lambda function."
+  type        = string
+  default     = "Invicton-Labs/lambda-shell/aws (https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws)"
+}
+
 variable "lambda_timeout" {
   description = "The timeout (in seconds) for the Lambda function that is running the shell command."
   type        = number
@@ -14,6 +20,16 @@ variable "lambda_role_arn" {
   description = "The ARN of the role to use for the Lambda that runs shell commands. If this value is provided, a new role will not be created. Conflicts with `lambda_role_policy_json`. If neither is provided, the module will attempt to use the role that the Terraform caller has assumed (if a role has been assumed)."
   type        = string
   default     = null
+}
+
+variable "lambda_architecture" {
+  description = "The architecture to use for the Lambda function."
+  type        = string
+  default     = "x86_64"
+  validation {
+    condition     = contains(["x86_64", "arm64"], var.lambda_architecture)
+    error_message = "The `lambda_architecture` variable must be `x86_64` or `arm64`."
+  }
 }
 
 variable "lambda_role_policies_json" {
@@ -62,8 +78,18 @@ variable "lambda_vpc_config" {
 
 variable "lambda_layer_arns" {
   description = "A list of Lambda Layer ARNs to attach to the Lambda."
-  type = list(string)
-  default = []
+  type        = list(string)
+  default     = []
+}
+
+variable "lambda_runtime" {
+  description = "The runtime to use for the lambda shell."
+  type        = string
+  default     = "python3.9"
+  validation {
+    condition     = contains(["python3.7", "python3.8", "python3.9"], var.lambda_runtime)
+    error_message = "The `lambda_runtime` variable must be `python3.7`, `python3.8`, or `python3.9`."
+  }
 }
 
 data "aws_caller_identity" "current" {}

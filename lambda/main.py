@@ -1,15 +1,17 @@
+
 import subprocess
 import uuid
 import os
-
 import logging
+import sys
+import json
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 
 def lambda_handler(event, context):
-    logger.debug("Input event: {}".format(event))
+    logger.debug("Input event: {}".format(json.dumps(event)))
 
     cmd = event['interpreter']
     if event['command'] is not None:
@@ -25,7 +27,10 @@ def lambda_handler(event, context):
 
     # For the subprocess environment, use all of the existing env vars, plus
     # any new ones. New ones with the same name will overwrite.
-    new_env = os.environ.copy() | event['environment']
+    new_env = os.environ.copy()
+    # Set the python path to include everything that is given by default to Python functions
+    new_env['PYTHONPATH'] = ':'.join(sys.path)
+    new_env.update(event['environment'])
 
     # Start the process
     p = subprocess.Popen(
@@ -84,6 +89,9 @@ Stderr:
 {}
 '''.format(exit_code, stdout, stderr))
 
+    logger.debug("Exit code: {}".format(exit_code))
+    logger.debug("Stdout {}".format(stdout))
+    logger.debug("Stderr {}".format(stderr))
     return {
         'exit_code': exit_code,
         'stdout': stdout,

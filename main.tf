@@ -21,12 +21,14 @@ module "shell_lambda" {
   archive_output_directory = "${path.module}/archives/"
   lambda_config = {
     function_name = "invicton-labs-aws-lambda-shell-${random_id.lambda.hex}"
+    description   = var.lambda_description
     handler       = "main.lambda_handler"
-    runtime       = "python3.9"
+    runtime       = var.lambda_runtime
     timeout       = var.lambda_timeout
     memory_size   = var.lambda_memory_size
     role          = local.lambda_role
     layers        = var.lambda_layer_arns
+    architectures = [var.lambda_architecture]
     tags = {
       "ModuleAuthor" = "InvictonLabs"
       "ModuleUrl"    = "https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws"
