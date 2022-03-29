@@ -11,7 +11,8 @@ logger.setLevel(logging.DEBUG)
 
 
 def lambda_handler(event, context):
-    logger.debug("Input event: {}".format(json.dumps(event)))
+    if event.get('log_event', False):
+        logger.debug("Input event: {}".format(json.dumps(event)))
 
     cmd = event['interpreter']
     if event['command'] is not None:
@@ -23,7 +24,8 @@ def lambda_handler(event, context):
         cmd.append(scriptpath)
 
     # Run the command as a subprocess
-    logger.info("Running command: {}".format(cmd))
+    if event.get('log_event', False):
+        logger.info("Running command: {}".format(cmd))
 
     # For the subprocess environment, use all of the existing env vars, plus
     # any new ones. New ones with the same name will overwrite.
