@@ -28,7 +28,10 @@ module "shell_lambda" {
     memory_size   = var.lambda_memory_size
     role          = local.lambda_role
     layers        = var.lambda_layer_arns
-    architectures = [var.lambda_architecture]
+    // There seems to be a bug where, if you specify the x86_64 (default) architecture in a region that doesn't
+    // support the arm64 architecture, it won't keep the architecture in the state file. This results in a
+    // perpetual difference. So, if it's the default, we just set it to null and let it be default.
+    architectures = var.lambda_architecture != "x86_64" ? [var.lambda_architecture] : null
     tags = {
       "ModuleAuthor" = "InvictonLabs"
       "ModuleUrl"    = "https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws"
