@@ -15,7 +15,7 @@ module "shell_lambda" {
     module.assert_single_role.checked
   ]
   source                   = "Invicton-Labs/lambda-set/aws"
-  version                  = "~> 0.4.2"
+  version                  = "~> 0.5.0"
   edge                     = false
   source_directory         = "${path.module}/lambda"
   archive_output_directory = "${path.module}/archives/"
