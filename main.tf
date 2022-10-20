@@ -14,8 +14,8 @@ module "shell_lambda" {
     module.assert_role_present.checked,
     module.assert_single_role.checked
   ]
-  source                   = "Invicton-Labs/lambda-set/aws"
-  version                  = "~> 0.5.0"
+  source                   = "Kalepa/lambda-set/aws"
+  version                  = "~> 0.5"
   edge                     = false
   source_directory         = "${path.module}/lambda"
   archive_output_directory = "${path.module}/archives/"
