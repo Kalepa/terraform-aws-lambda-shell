@@ -1,7 +1,7 @@
 variable "lambda_description" {
   description = "The description string to apply to the Lambda function."
   type        = string
-  default     = "Invicton-Labs/lambda-shell/aws (https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws)"
+  default     = "Kalepa/lambda-shell/aws (https://registry.terraform.io/modules/Kalepa/lambda-shell/aws)"
 }
 
 variable "lambda_timeout" {
@@ -103,14 +103,14 @@ locals {
 }
 
 module "assert_role_present" {
-  source        = "Invicton-Labs/assertion/null"
-  version       = "0.2.1"
+  source        = "Kalepa/assertion/null"
+  version       = "~> 0.2"
   condition     = var.lambda_role_arn != null || var.lambda_role_policies_json != null || var.lambda_role_policy_arns != null || local.caller_role_arn != null
   error_message = "One of the `lambda_role_arn`, `lambda_role_policies_json`, or `lambda_role_policy_arns` input parameters must be provided, or this module must be called from a Terraform configuration that has assumed a role."
 }
 module "assert_single_role" {
-  source        = "Invicton-Labs/assertion/null"
-  version       = "0.2.1"
+  source        = "Kalepa/assertion/null"
+  version       = "~> 0.2"
   condition     = var.lambda_role_arn == null || (var.lambda_role_policies_json == null && var.lambda_role_policy_arns == null)
   error_message = "The `lambda_role_arn` cannot be provided when either the `lambda_role_policies_json` or `lambda_role_policy_arns` input parameter is provided."
 }

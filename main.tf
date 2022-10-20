@@ -14,13 +14,13 @@ module "shell_lambda" {
     module.assert_role_present.checked,
     module.assert_single_role.checked
   ]
-  source                   = "Invicton-Labs/lambda-set/aws"
-  version                  = "~> 0.5.0"
+  source                   = "Kalepa/lambda-set/aws"
+  version                  = "~> 0.5"
   edge                     = false
   source_directory         = "${path.module}/lambda"
   archive_output_directory = "${path.module}/archives/"
   lambda_config = {
-    function_name = "invicton-labs-aws-lambda-shell-${random_id.lambda.hex}"
+    function_name = "kalepa-aws-lambda-shell-${random_id.lambda.hex}"
     description   = var.lambda_description
     handler       = "main.lambda_handler"
     runtime       = var.lambda_runtime
@@ -34,7 +34,7 @@ module "shell_lambda" {
     architectures = var.lambda_architecture != "x86_64" ? [var.lambda_architecture] : null
     tags = {
       "ModuleAuthor" = "InvictonLabs"
-      "ModuleUrl"    = "https://registry.terraform.io/modules/Invicton-Labs/lambda-shell/aws"
+      "ModuleUrl"    = "https://registry.terraform.io/modules/Kalepa/lambda-shell/aws"
     }
     vpc_config = var.lambda_vpc_config
   }
