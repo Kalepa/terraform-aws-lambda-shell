@@ -15,7 +15,7 @@ module "shell_lambda" {
     module.assert_single_role.checked
   ]
   source                   = "Kalepa/lambda-set/aws"
-  version                  = "~> 0.5"
+  version                  = "~> 0.6.1"
   edge                     = false
   source_directory         = "${path.module}/lambda"
   archive_output_directory = "${path.module}/archives/"
